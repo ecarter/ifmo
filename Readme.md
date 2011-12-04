@@ -1,6 +1,6 @@
-ifmod
+# ifmod
 
-A node.js cli that watches files and fires commands if modified.
+A [node.js](http://nodejs.org) watcher cli that fires commands if files are modified.
 
 ---
 

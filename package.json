@@ -1,0 +1,20 @@
+{
+  "author": "Erin Carter <hi@dnvsfn.com> (http://github.com/ecarter)",
+  "name": "ifmod",
+  "description": "a watcher cli that fires commands if files are modified",
+  "version": "0.0.0",
+  "homepage": "http://github.com/ecarter/ifmod",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ecarter/ifmod.git"
+  },
+  "main": "index",
+  "scripts": {
+    "test": "mocha"
+  },
+  "engines": {
+    "node": ">=0.4.11"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
