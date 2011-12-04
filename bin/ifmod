@@ -14,10 +14,15 @@ cli
   .option( 'd', 'directory', "the directory of files you'd like to watch")
   .option( 'r', 'recursive', "watches for all files in sub-directories")
   .option( 'v', 'verbose', "output all the things!")
+  .option( '-c, --command <cmd>',   " the command that is executed when a change is found" )
+  .option( '-d, --directory <dir>', " the directory of files you'd like to watch" )
+  .option( '-r, --recursive',       " watches for all files in sub-directories" )
+  .option( '-v, --verbose',         " output all the things!" )
   .main( function (args) {
 
     var files;
 
+    
     if ( !args.directory ) {
       console.log('Please specifiy directory: -d, --directory');
 
@@ -68,6 +73,7 @@ cli
         
         ifmod.watchFile( file, ifModified );
       
+        return ifmod.watchFile( file, ifModified );
       });
 
     }
