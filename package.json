@@ -9,6 +9,9 @@
     "url": "git://github.com/ecarter/ifmod.git"
   },
   "main": "index",
+  "bin": { 
+    "ifmod": "./bin/ifmod"
+  },
   "scripts": {
     "test": "mocha"
   },
@@ -16,5 +19,7 @@
     "node": ">=0.4.11"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": ">=0.0.8"
+  }
 }
