@@ -1,16 +1,16 @@
 {
   "author": "Erin Carter <hi@dnvsfn.com> (http://github.com/ecarter)",
   "name": "ifmod",
-  "description": "a watcher cli that fires commands if files are modified",
+  "description": "watch files, do ____ if modified",
   "version": "0.0.0",
-  "homepage": "http://github.com/ecarter/ifmod",
+  "homepage": "http://github.com/ecarter/ifmo",
   "repository": {
     "type": "git",
-    "url": "git://github.com/ecarter/ifmod.git"
+    "url": "git://github.com/ecarter/ifmo.git"
   },
   "main": "index",
   "bin": { 
-    "ifmod": "./bin/ifmo"
+    "ifmo": "./bin/ifmo"
   },
   "scripts": {
     "test": "mocha"
