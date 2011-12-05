@@ -4,12 +4,14 @@
  * dependencies 
  */
 
-var cli = require('cli-kit')
+var cli = require('clii')
   , exec = require('child_process').exec
   , ifmod = require('../lib/ifmod')
   , log = require('util').log;
 
 cli
+  .name('ifmod')
+  .v(ifmod.VERSION)
   .option( '-c, --command <cmd>',   " the command that is executed when a change is found" )
   .option( '-d, --directory <dir>', " the directory of files you'd like to watch" )
   .option( '-r, --recursive',       " watches for all files in sub-directories" )
