@@ -10,7 +10,7 @@ function touchFile (done){
   });
 }
 
-describe('ifmod', function(){
+describe('ifmod - watch', function(){
   
   before(touchFile)
   

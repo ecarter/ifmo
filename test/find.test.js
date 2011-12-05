@@ -8,7 +8,7 @@ var dir = './test/test_find_dir'
   , "test/test_find_dir/testfile.test"
   ];
 
-describe('ifmod find', function(){
+describe('ifmod - find', function(){
   
   before(function(done){
     
