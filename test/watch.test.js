@@ -24,12 +24,11 @@ describe('ifmod', function(){
   describe('#watchFile()', function(){
     it('should should let us know the file has been modified', function(done){
       ifmod.watchFile(file, function () {
-        console.log('change found');
         done();
       });
       setTimeout( function () {
         touchFile(function () { 
-          console.log('touch done'); 
+          console.log(file, 'touched'); 
         });
       }, 1000);
     })
