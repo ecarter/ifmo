@@ -10,7 +10,7 @@
   },
   "main": "index",
   "bin": { 
-    "ifmod": "./bin/ifmod"
+    "ifmod": "./bin/ifmo"
   },
   "scripts": {
     "test": "mocha"

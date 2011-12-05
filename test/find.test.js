@@ -1,5 +1,5 @@
 var exec = require('child_process').exec
-  , ifmod = require('../lib/ifmod');
+  , ifmod = require('../lib/ifmo');
 
 var dir = './test/test_find_dir'
   , test_files = [

@@ -1,5 +1,5 @@
 var exec = require('child_process').exec
-  , ifmod = require('../lib/ifmod');
+  , ifmod = require('../lib/ifmo');
 
 var file = './test/testfile.test';
 
