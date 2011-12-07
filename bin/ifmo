@@ -9,22 +9,21 @@ var cli = require('clii')
   , ifmod = require('../lib/ifmo')
   , log = require('util').log;
 
-cli
-  .name('ifmod')
+cli('ifmod')
   .v(ifmod.VERSION)
-  .option( '-c, --command <cmd>',   " the command that is executed when a change is found" )
-  .option( '-d, --directory <dir>', " the directory of files you'd like to watch" )
-  .option( '-r, --recursive',       " watches for all files in sub-directories" )
-  .option( '-v, --verbose',         " output all the things!" )
-  .main( function (args) {
+  .option( "-c, --command <cmd>  the command that is executed when a change is found" )
+  .option( "-d, --directory <dir>  the directory of files you'd like to watch" )
+  .option( "-r, --recursive  watches for all files in sub-directories" )
+  .option( "-v, --verbose  output all the things!" )
+  .run( function (args) {
     var files;
     
-    if ( !args.directory ) {
-      console.log('Please specifiy directory: -d, --directory');
+    console.log('ifmo args:',args);
+    
+    if ( !args.directory || !(args.directory.length > 0) ) {
+      console.log('\n  Please specifiy directory: -d, --directory\n');
     } else {
-      args.directory.forEach( function (dir) {
-        files = ifmod.findFiles(dir, { recursive: args.recursive } );
-      });
+      files = ifmod.findFiles(args.directory, { recursive: args.recursive } );
     }
 
     if ( files ) {
