@@ -23,7 +23,7 @@ cli('ifmod')
     if ( !args.directory || !(args.directory.length > 0) ) {
       console.log('\n  Please specifiy directory: -d, --directory\n');
     } else {
-      files = ifmod.findFiles(args.directory, { recursive: args.recursive } );
+      files = ifmod.find(args.directory, { recursive: args.recursive } );
     }
 
     if ( files ) {
@@ -62,7 +62,7 @@ cli('ifmod')
           });
           
         };
-        return ifmod.watchFile( file, ifModified );
+        return ifmod.watch( file, ifModified );
       });
     }
   });
