@@ -1,5 +1,5 @@
 var exec = require('child_process').exec
-  , ifmod = require('../lib/ifmo');
+  , ifmod = require('../');
 
 var file = './test/testfile.test';
 
@@ -21,9 +21,9 @@ describe('ifmod - watch', function(){
     })
   })
   
-  describe('#watchFile()', function(){
+  describe('#watch()', function(){
     it('should should let us know the file has been modified', function(done){
-      ifmod.watchFile(file, function () {
+      ifmod.watch(file, function () {
         done();
       });
       setTimeout( function () {

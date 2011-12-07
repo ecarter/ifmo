@@ -1,5 +1,5 @@
 var exec = require('child_process').exec
-  , ifmod = require('../lib/ifmo');
+  , ifmod = require('../');
 
 var dir = './test/test_find_dir'
   , test_files = [
@@ -37,10 +37,10 @@ describe('ifmod - find', function(){
     });
   })
   
-  describe('#findFiles()', function(){
+  describe('#find()', function(){
     
     it('should return a single file', function (done) {
-      var files = ifmod.findFiles( dir, { recursive: false } );
+      var files = ifmod.find( dir, { recursive: false } );
       files.should.have.length(1);
       files[0].should.eql( test_files[2] );
       done();
@@ -48,10 +48,10 @@ describe('ifmod - find', function(){
     
   })
   
-  describe('#findFiles() - recursive', function(){
+  describe('#find() - recursive', function(){
     
     it('should return a none-recursive list of test files', function (done) {
-      var files = ifmod.findFiles( dir, { recursive: true } );
+      var files = ifmod.find( dir, { recursive: true } );
       files.should.have.length(3);
       files[0].should.eql( test_files[0] );
       files[1].should.eql( test_files[1] );

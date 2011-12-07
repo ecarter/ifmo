@@ -1,2 +1,2 @@
 
-module.exports = require('./lib/ifmod');
+module.exports = require('./lib/ifmo');
