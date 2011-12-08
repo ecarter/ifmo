@@ -6,31 +6,59 @@
 
 var cli = require('clii')
   , exec = require('child_process').exec
-  , log = require('util').log
+  , ulog = require('util').log
   , ifmod = require('../');
+
+var growl
+  , use_growl;
+
+try {
+  growl = require('growl');
+} catch (e) {
+  // no growl support
+}
+
+function log (msg) {
+  
+  ulog( msg );
+  
+  if ( use_growl ) {
+    if ( !growl ) {
+      console.log('need growl support!\n\n  npm install -g growl');
+      return;
+    } else {
+      growl.notify( msg );
+    }
+  }
+  
+}
 
 cli( 'ifmod' )
   .v( ifmod.VERSION )
-  .opt("-c, --command <cmd>  the command that is executed when a change is found")
-  .opt("-d, --directory <dir>  the directory of files you'd like to watch")
-  .opt("-r, --recursive  watches for all files in sub-directories")
-  .opt("--verbose  output all the things!")
-  .run( function (args) {
+  .opt( "-c, --command <cmd>  the command that is executed when a change is found" )
+  .opt( "-d, --directory <dir>  the directory of files you'd like to watch" )
+  .opt( "-r, --recursive  watches for all files in sub-directories" )
+  .opt( "-g, --growl  enables growl support ( npm install -g growl )" )
+  .opt( "--verbose  output all the things!" )
+  .run( function (opts, args) {
+    
     var files;
     
-    if ( !args.directory || !(args.directory.length > 0) ) {
+    use_growl = opts.growl ? true : false;
+    
+    if ( !opts.directory ) {
       console.log('\n  Please specifiy: -d, --directory <dir>\n');
     } else {
-      files = ifmod.find(args.directory, { recursive: args.recursive } );
+      files = ifmod.find( opts.directory, { recursive: opts.recursive } );
     }
-
+    
     if ( files ) {
-  
-      if ( args.verbose ) {
+    
+      if ( opts.verbose ) {
         var msg = [ "" ];
-    
+        
         log("watching files:");
-    
+        
         files.forEach(function(f){
           msg.push( ["    ", f].join('') );
         });
@@ -41,23 +69,24 @@ cli( 'ifmod' )
   
       files.forEach( function ( file ) { 
         
-        var ifModified = !args.command ? function () {
+        var ifModified = !opts.command ? function () {
           
           return log( ['modified:', file].join(' ') );
           
         } : function () {
           
-          if ( args.verbose ) {
+          if ( opts.verbose ) {
             log( ['changed found in:', file].join(' ') );
-            log( ['running:', args.command].join(' ') );
+            log( ['running:', opts.command].join(' ') );
           }
           
-          
-          exec(args.command, function (err, stdout, stderr) {
-            if (err) throw err;
-            if (stdout) console.log(stdout);
-            if (stderr) console.log(stderr);
-          });
+          if ( opts.command ) {
+            exec( opts.command, function (err, stdout, stderr) {
+              if (err) throw err;
+              if (stdout) console.log(stdout);
+              if (stderr) console.log(stderr);
+            });
+          }
           
         };
         return ifmod.watch( file, ifModified );
