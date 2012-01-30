@@ -1,27 +1,44 @@
-#!/usr/bin/env node
-
 /**
- * dependencies 
+ * Ifmo - bin
+ * Copyright (C) 2011 Erin Carter ( hi@dnvsfn.com )
+ * MIT Licensed
  */
 
+#!/usr/bin/env node
+
+/** Requires */
+
 var cli = require('clii')
-  , exec = require('child_process').exec
-  , ulog = require('util').log
+  , spawn = require('child_process').spawn
+  , utilog = require('util').log
   , ifmod = require('../');
 
-var growl
-  , use_growl;
+var command
+  , directory
+  , files
+  , growl
+  , use_growl
+  , verbose;
 
+
+// Check for growl support
 try {
   growl = require('growl');
 } catch (e) {
   // no growl support
 }
 
+
+/**
+ * Logs Ifmo notifications
+ *
+ * Uses growl if `use_growl` is defined.
+ *
+ * @param {String} msg Message
+ */
+
 function log (msg) {
-  
-  ulog( msg );
-  
+  utilog( msg );
   if ( use_growl ) {
     if ( !growl ) {
       console.log('need growl support!\n\n  npm install -g growl');
@@ -30,8 +47,56 @@ function log (msg) {
       growl.notify( msg );
     }
   }
-  
 }
+
+/**
+ * Runs command specified with `-c` or `--command`
+ */
+
+function runCommand () {
+  var cmd;
+  
+  // Create new process
+  cmd = spawn( command );
+  
+  // Data
+  cmd.stdout.on('data', function ( data ) {
+    console.log( '' + data );
+  });
+  
+  // Error
+  cmd.stderr.on('data', function ( data ) {
+    console.log( '' + data );
+  });
+  
+  // Exit
+  cmd.on('exit', function (code) {
+    if ( code !== 0 ) console.log('done.');
+  });
+}
+
+/**
+ * Adds watcher to specified file.
+ *
+ * @param {String} file File to be watched
+ */
+
+function watcher ( file ) { 
+  return ifmod.watch( file, 
+    command
+      ? function () {
+          if (verbose) log('[MODIFIED] ' + file + '\n' + '[EXECUTING] ' + command);
+          runCommand();
+        }
+      : function (file) { 
+          return log( '[MODIFIED] ' + file );
+        }
+  );
+}
+
+/**
+ * Ifmo CLI Utility
+ */
 
 cli('ifmo v0.0.1')
   .option('-c, --command <cmd>  command that is executed when a change is found')
@@ -41,58 +106,44 @@ cli('ifmo v0.0.1')
   .option('--verbose  output all the thing (default)')
   .run( function (opts, args) {
     
-    var files
-      , dir
-      , verb;
+    var output = '\n'; // Buffer
     
+    /**
+     * Set Options
+     */
+    command = opts.command || false;
+    directory = opts.directory || args[0];
     use_growl = opts.growl ? true : false;
-    dir = opts.directory || args[0];
-    verb = opts.verbose === false ? false : true;
+    verbose = opts.verbose || true;
     
-    if ( !dir ) {
+    /**
+     * When directory is specified
+     */
+    if ( !directory ) {
       console.log('\n  Please specifiy: -d, --directory <dir>\n');
     } else {
-      files = ifmod.find( dir, { recursive: opts.recursive } );
+      files = ifmod.find( directory, { recursive: opts.recursive } );
     }
     
+    /**
+     * When files are found
+     */
     if ( files ) {
-    
-      if ( verb ) {
-        var msg = [ "" ];
-        
+      
+      /**
+       * Output watched files
+       */
+      if ( verbose ) {
         log("watching files:");
-        
-        files.forEach(function(f){
-          msg.push( ["    ", f].join('') );
+        files.forEach( function ( file ) {
+          output += "    " + file + '\n';
         });
-        
-        msg.push('');
-        console.log( msg.join('\n') );
+        console.log( output );
       }
       
-      files.forEach( function ( file ) { 
-        
-        var ifModified = !opts.command ? function () {
-          
-          return log( ['modified:', file].join(' ') );
-          
-        } : function () {
-          
-          if ( verb ) {
-            log( ['changed found in:', file].join(' ') );
-            log( ['running:', opts.command].join(' ') );
-          }
-          
-          if ( opts.command ) {
-            exec( opts.command, function (err, stdout, stderr) {
-              if (err) throw err;
-              if (stdout) console.log(stdout);
-              if (stderr) console.log(stderr);
-            });
-          }
-          
-        };
-        return ifmod.watch( file, ifModified );
-      });
+      /**
+       * Add watcher to each file
+       */
+      files.forEach( watcher );
     }
   });
