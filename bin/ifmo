@@ -1,10 +1,10 @@
+#!/usr/bin/env node
+
 /**
  * Ifmo - bin
  * Copyright (C) 2011 Erin Carter ( hi@dnvsfn.com )
  * MIT Licensed
  */
-
-#!/usr/bin/env node
 
 /** Requires */
 
